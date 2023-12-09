@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class FlipDx2D : MonoBehaviour
 {
+    //ciaooo
     public bool isKeyPress = false;
     public bool isTouched = false;
     public float speed = 0f;
