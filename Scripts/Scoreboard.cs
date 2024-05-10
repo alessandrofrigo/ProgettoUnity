@@ -67,22 +67,25 @@ public class Scoreboard : MonoBehaviour
             livello.text = "Livello: " + level;
             counter++; 
             if(counter == 3){
-                livello.text ="  game over";
+                livello.text =", game over";
+                scoreText.text = "Il totale è: " + tot;
+                counter = 0;
             }
         }
         else if (tag == "PlungerAnchor") 
         {
-            level =0;
+            //level =0;
             livello.text = "Livello: " + level;
+            scoreText.text = " Score: " + score;
             
         }
     }
     // Update is called once per frame
-    void Update()
+    /*void Update()
     {
         if(counter == 3){
                 scoreText.text = "Il totale è: " + tot;
                 //return;
             }
-    }
+    }*/
 }

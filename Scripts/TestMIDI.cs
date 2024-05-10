@@ -24,6 +24,7 @@ public class TestMIDI : MonoBehaviour
     string [] filesname ;
     string[] fileContents;
    static bool isPlaying = false;
+   static bool disposed = false;
    static private int count = 0;
 
    // Start is called before the first frame update
@@ -43,7 +44,20 @@ public class TestMIDI : MonoBehaviour
         }
         //output = OutputDevice.GetByName("MIDIOUT2 (USB2.0-MIDI)");
         output = OutputDevice.GetByName("Microsoft GS Wavetable Synth");
+        Invoke("MyFunction2",1);
     }
+
+    void MyFunction2(){
+
+        file = MidiFile.Read(fileContents[0]);//mettere midi vuoto
+        playback = file.GetPlayback(output);
+                //Debug.Log("Non sto suonando!3");
+           playback.Speed = 1.0;
+        playback.Start();
+            isPlaying = true;
+            MyFunction();
+    }
+
     void MyFunction()
     {
         Debug.Log(playback.IsRunning);
@@ -55,6 +69,10 @@ public class TestMIDI : MonoBehaviour
     }
      void OnCollisionEnter2D(Collision2D collision)
     {
+        if(disposed){
+            output = OutputDevice.GetByName("Microsoft GS Wavetable Synth");
+            disposed = false;
+        }
         if(collision.otherCollider.tag == "Ostacolo3") 
         {
             //Debug.Log("Ostacolo 3");
@@ -129,14 +147,15 @@ public class TestMIDI : MonoBehaviour
             board.UpdateScore("Fondo");
             if (count == 3)
             {
-                //#if UNITY_EDITOR
                 playback.Stop();
                 output.Dispose();
                 playback.Dispose();
-                EditorApplication.isPlaying = false;
+                disposed = true;
+                //EditorApplication.isPlaying = false;
                 Debug.Log(EditorApplication.isPlaying);
                 count=0;
-                //#endif
+                //ReopenProject();
+                //EditorApplication.ExitPlaymode();
             }
            
         }
@@ -145,6 +164,15 @@ public class TestMIDI : MonoBehaviour
             board.UpdateScore("PlungerAnchor");
         }
     }
+
+    public static void ReopenProject()
+{
+    Debug.Log("Ciao log!");
+    string projectPath = Application.dataPath.Remove(
+        Application.dataPath.Length - "/Assets".Length, "/Assets".Length);
+    //EditorApplication.OpenProject(projectPath);
+}
+
     // Update is called once per frame
     void Update()
     {
