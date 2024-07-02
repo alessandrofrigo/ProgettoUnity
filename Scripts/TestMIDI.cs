@@ -27,6 +27,9 @@ public class TestMIDI : MonoBehaviour
    static bool disposed = false;
    static private int count = 0;
 
+   //FIXME: Editor still crashes if exiting abruptly, to fix in app deployment...
+   //FIXME: change output volume...
+
    // Start is called before the first frame update
     void Start()
     {
@@ -43,7 +46,8 @@ public class TestMIDI : MonoBehaviour
             Debug.Log(outputDevice.Name);
         }
         //output = OutputDevice.GetByName("MIDIOUT2 (USB2.0-MIDI)");
-        output = OutputDevice.GetByName("Microsoft GS Wavetable Synth");
+        //output = OutputDevice.GetByName("Microsoft GS Wavetable Synth");
+        output = OutputDevice.GetByName("Disklavier"); 
         Invoke("MyFunction2",1);
     }
 
@@ -60,16 +64,19 @@ public class TestMIDI : MonoBehaviour
 
     void MyFunction()
     {
+        if(isPlaying){
         Debug.Log(playback.IsRunning);
         Debug.Log("Adesso stoppo!!!");
         playback.Stop();  
         isPlaying = false;
         /* output.Dispose();
         playback.Dispose(); */
+        }
     }
-     void OnCollisionEnter2D(Collision2D collision)
+     void OnCollisionEnter2D(Collision2D collision) 
     {
         if(disposed){
+            //Debug.Log("Sono entrato dopo disposed!");
             output = OutputDevice.GetByName("Microsoft GS Wavetable Synth");
             disposed = false;
         }
@@ -147,10 +154,11 @@ public class TestMIDI : MonoBehaviour
             board.UpdateScore("Fondo");
             if (count == 3)
             {
-                playback.Stop();
-                output.Dispose();
+                playback.Stop(); 
                 playback.Dispose();
+                output.Dispose();
                 disposed = true;
+                isPlaying = false;
                 //EditorApplication.isPlaying = false;
                 Debug.Log(EditorApplication.isPlaying);
                 count=0;

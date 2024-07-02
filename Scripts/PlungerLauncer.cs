@@ -18,6 +18,9 @@ public class PlungerLauncer : MonoBehaviour
     float force = 0f;          // current force generated
     public float maxForce;
     // Start is called before the first frame update
+
+    public Scoreboard board;
+
     void Start()
     {
         springJoint = GetComponent<SpringJoint2D>();
@@ -59,6 +62,7 @@ public class PlungerLauncer : MonoBehaviour
             if (isKeyPress == false && isTouched == false && startTime != 0f)
             {
                 Debug.Log("spazio rilasciato");
+                board.UpdateScore("PlungerAnchor");
                 // calculates current force of exertion
                 force = powerIndex * maxForce;
                 Debug.Log("force: "+force);
